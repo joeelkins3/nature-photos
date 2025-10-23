@@ -1,0 +1,396 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Image Gallery</title>
+    <style>
+        :root{
+            --gap: 10px;
+            --bg:#111;
+            --ui:#fff;
+        }
+        html,body{height:100%}
+        body{
+            margin:0;
+            background:var(--bg);
+            color:var(--ui);
+            font-family:system-ui,Segoe UI,Roboto,Arial,sans-serif;
+            -webkit-font-smoothing:antialiased;
+            -moz-osx-font-smoothing:grayscale;
+        }
+
+        /* Gallery grid */
+        .gallery{
+            display:grid;
+            grid-template-columns: repeat(auto-fill, minmax(160px,1fr));
+            gap:var(--gap);
+            padding:var(--gap);
+            align-content:start;
+        }
+        .tile{
+            display:block;
+            width:100%;
+            height:0;
+            padding-bottom:66.66%; /* 3:2 aspect default */
+            position:relative;
+            overflow:hidden;
+            background:#222;
+            border-radius:8px;
+        }
+        .tile img{
+            position:absolute;
+            inset:0;
+            width:100%;
+            height:100%;
+            object-fit:cover;
+            display:block;
+            transition:transform .35s ease, filter .35s ease;
+            cursor:zoom-in;
+            filter:brightness(.98);
+        }
+        .tile:focus-within img,
+        .tile:hover img{
+            transform:scale(1.03);
+            filter:brightness(1);
+        }
+        .tile button{
+            position:absolute;
+            inset:0;
+            border:0;
+            padding:0;
+            margin:0;
+            background:transparent;
+            cursor:zoom-in;
+        }
+
+        /* Lightbox */
+        .lightbox{
+            position:fixed;
+            inset:0;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            background:rgba(0,0,0,.85);
+            z-index:999;
+            opacity:0;
+            pointer-events:none;
+            transition:opacity .18s ease;
+        }
+        .lightbox.visible{
+            opacity:1;
+            pointer-events:auto;
+        }
+        .lightbox img{
+            max-width:92vw;
+            max-height:92vh;
+            box-shadow:0 10px 40px rgba(0,0,0,.6);
+            border-radius:6px;
+        }
+        .lb-btn{
+            position:fixed;
+            top:50%;
+            transform:translateY(-50%);
+            background:rgba(255,255,255,.06);
+            border:1px solid rgba(255,255,255,.08);
+            color:var(--ui);
+            width:44px;
+            height:44px;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            border-radius:50%;
+            cursor:pointer;
+        }
+        .lb-prev{left:12px}
+        .lb-next{right:12px}
+        .lb-close{
+            position:fixed;
+            right:12px;
+            top:12px;
+            width:40px;height:40px;
+            background:transparent;
+            border:1px solid rgba(255,255,255,.06);
+            border-radius:8px;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            cursor:pointer;
+        }
+        .visually-hidden{
+            position:absolute!important;
+            height:1px;width:1px;
+            overflow:hidden;clip:rect(1px,1px,1px,1px);
+            white-space:nowrap;border:0;padding:0;margin:-1px;
+        }
+
+        /* Small screens tweak */
+        @media (max-width:420px){
+            .gallery{grid-template-columns:repeat(2,1fr)}
+            .tile{padding-bottom:75%}
+            .lb-btn{width:36px;height:36px}
+        }
+    </style>
+</head>
+<body>
+    <!-- All visible content is images only (no visible text) -->
+    <main class="gallery" aria-label="Image gallery">
+        <!-- Duplicate/replace the <figure> blocks with your image files.
+                 Use meaningful alt text for accessibility (not visible). -->
+        <figure class="tile">
+            <button aria-label="Open image 1"></button>
+            <img data-src="c:\Users\joeel\Downloads\IMG_4782.jpeg" alt="Lake Crescent" loading="lazy">
+        </figure>
+
+        <figure class="tile">
+            <button aria-label="Open image 2"></button>
+            <img data-src="c:\Users\joeel\Downloads\IMG_4773.jpeg" alt="Me and my friend" loading="lazy">
+        </figure>
+
+        <figure class="tile">
+            <button aria-label="Open image 3"></button>
+            <img data-src="c:\Users\joeel\Downloads\IMG_4815.jpeg" alt="Quinnalt Rainforest" loading="lazy">
+        </figure>
+
+        <figure class="tile">
+            <button aria-label="Open image 4"></button>
+            <img data-src="c:\Users\joeel\Downloads\chimborazo.jpg" alt="Mount Chimborazo" loading="lazy">
+        </figure>
+
+        <figure class="tile">
+            <button aria-label="Open image 5"></button>
+            <img data-src="c:\Users\joeel\Downloads\chicagoN.jpg" alt="View from my Apartment!" loading="lazy">
+        </figure>
+
+        <figure class="tile">
+            <button aria-label="Open image 5"></button>
+            <img data-src="c:\Users\joeel\Downloads\IMG_5767.jpeg" alt="Lake Tahoe" loading="lazy">
+        </figure>
+
+        <figure class="tile">
+            <button aria-label="Open image 5"></button>
+            <img data-src="c:\Users\joeel\Downloads\IMG_5764.jpeg" alt="Lake Tahoe" loading="lazy">
+        </figure>
+
+        <figure class="tile">
+            <button aria-label="Open image 5"></button>
+            <img data-src="c:\Users\joeel\Downloads\IMG_5762.jpeg" alt="Lake Tahoe" loading="lazy">
+        </figure>
+
+        <figure class="tile">
+            <button aria-label="Open image 5"></button>
+            <img data-src="c:\Users\joeel\Downloads\IMG_5768.jpeg" alt="Lake Tahoe" loading="lazy">
+        </figure>
+
+        <figure class="tile">
+            <button aria-label="Open image 5"></button>
+            <img data-src="c:\Users\joeel\Downloads\IMG_5766.jpeg" alt="Lake Tahoe" loading="lazy">
+        </figure>
+
+        <figure class="tile">
+            <button aria-label="Open image 5"></button>
+            <img data-src="c:\Users\joeel\Downloads\IMG_2490.jpeg" alt="Yosemite" loading="lazy">
+        </figure>
+
+        <figure class="tile">
+            <button aria-label="Open image 5"></button>
+            <img data-src="c:\Users\joeel\Downloads\IMG_2495.jpeg" alt="Yosemite" loading="lazy">
+        </figure>
+
+        <figure class="tile">
+            <button aria-label="Open image 5"></button>
+            <img data-src="c:\Users\joeel\Downloads\IMG_2494.jpeg" alt="Yosemite" loading="lazy">
+        </figure>
+
+        <figure class="tile">
+            <button aria-label="Open image 5"></button>
+            <img data-src="c:\Users\joeel\Downloads\IMG_2501.jpeg" alt="Yosemite" loading="lazy">
+        </figure>
+
+        <figure class="tile">
+            <button aria-label="Open image 5"></button>
+            <img data-src="c:\Users\joeel\Downloads\IMG_2496.jpeg" alt="Yosemite" loading="lazy">
+        </figure>
+
+        <figure class="tile">
+            <button aria-label="Open image 5"></button>
+            <img data-src="c:\Users\joeel\Downloads\IMG_3252.jpeg" alt="Utah" loading="lazy">
+        </figure>
+
+        <figure class="tile">
+            <button aria-label="Open image 5"></button>
+            <img data-src="c:\Users\joeel\Downloads\IMG_9159.jpeg" alt="Utah" loading="lazy">
+        </figure>
+
+        <figure class="tile">
+            <button aria-label="Open image 5"></button>
+            <img data-src="c:\Users\joeel\Downloads\IMG_3251.jpeg" alt="Utah" loading="lazy">
+        </figure>
+
+        <figure class="tile">
+            <button aria-label="Open image 5"></button>
+            <img data-src="c:\Users\joeel\Downloads\IMG_3248.jpeg" alt="Utah" loading="lazy">
+        </figure>
+
+        <figure class="tile">
+            <button aria-label="Open image 5"></button>
+            <img data-src="c:\Users\joeel\Downloads\IMG_3255.jpeg" alt="Utah" loading="lazy">
+        </figure>
+
+        <figure class="tile">
+            <button aria-label="Open image 5"></button>
+            <img data-src="c:\Users\joeel\Downloads\IMG_4224.jpeg" alt="Outside Vegas" loading="lazy">
+        </figure>
+
+        <figure class="tile">
+            <button aria-label="Open image 5"></button>
+            <img data-src="c:\Users\joeel\Downloads\IMG_3261.jpeg" alt="Utah" loading="lazy">
+        </figure>
+
+        <figure class="tile">
+            <button aria-label="Open image 5"></button>
+            <img data-src="c:\Users\joeel\Downloads\IMG_9073.jpeg" alt="Me over my Kingdom" loading="lazy">
+        </figure>
+
+        <figure class="tile">
+            <button aria-label="Open image 5"></button>
+            <img data-src="c:\Users\joeel\Downloads\IMG_0763.jpeg" alt="Vegas Strip" loading="lazy">
+        </figure>
+
+        <figure class="tile">
+            <button aria-label="Open image 5"></button>
+            <img data-src="c:\Users\joeel\Downloads\IMG_4202.jpeg" alt="Hoover Dam" loading="lazy">
+        </figure>
+
+        <figure class="tile">
+            <button aria-label="Open image 5"></button>
+            <img data-src="c:\Users\joeel\Downloads\IMG_4752.jpeg" alt="Olympic" loading="lazy">
+        </figure>
+
+        <figure class="tile">
+            <button aria-label="Open image 5"></button>
+            <img data-src="c:\Users\joeel\Downloads\IMG_4749.jpeg" alt="Olympic" loading="lazy">
+        </figure>
+
+        <figure class="tile">
+            <button aria-label="Open image 5"></button>
+            <img data-src="c:\Users\joeel\Downloads\IMG_4836.jpeg" alt="Olympic" loading="lazy">
+        </figure>
+
+        <figure class="tile">
+            <button aria-label="Open image 5"></button>
+            <img data-src="c:\Users\joeel\Downloads\IMG_4830.jpeg" alt="Olympic" loading="lazy">
+        </figure>
+
+        <figure class="tile">
+            <button aria-label="Open image 5"></button>
+            <img data-src="c:\Users\joeel\Downloads\IMG_4718.jpeg" alt="Olympic" loading="lazy">
+        </figure>
+
+        <figure class="tile">
+            <button aria-label="Open image 5"></button>
+            <img data-src="c:\Users\joeel\Downloads\IMG_4772.jpeg" alt="Olympic" loading="lazy">
+        </figure>
+
+        <figure class="tile">
+            <button aria-label="Open image 5"></button>
+            <img data-src="c:\Users\joeel\Downloads\IMG_4751.jpeg" alt="Olympic" loading="lazy">
+        </figure>
+        <!-- Add more tiles as needed -->
+    </main>
+
+    <!-- Lightbox / viewer (images only) -->
+    <div id="lightbox" class="lightbox" aria-hidden="true">
+        <button class="lb-close" aria-label="Close viewer">&times;</button>
+        <button class="lb-btn lb-prev" aria-label="Previous image">&#9664;</button>
+        <img id="lb-image" alt="">
+        <button class="lb-btn lb-next" aria-label="Next image">&#9654;</button>
+    </div>
+
+    <script>
+        // Simple lazy-load fallback + lightbox
+        (function(){
+            const imgs = Array.from(document.querySelectorAll('.tile img'));
+            // basic lazy load using IntersectionObserver; falls back to setting src immediately
+            if('IntersectionObserver' in window){
+                const io = new IntersectionObserver((entries, obs) => {
+                    entries.forEach(e=>{
+                        if(e.isIntersecting){
+                            const img = e.target;
+                            if(img.dataset.src) img.src = img.dataset.src;
+                            obs.unobserve(img);
+                        }
+                    });
+                }, {rootMargin:'200px'});
+                imgs.forEach(i=> io.observe(i));
+            } else {
+                imgs.forEach(i=> { if(i.dataset.src) i.src = i.dataset.src; });
+            }
+
+            // Lightbox
+            const lightbox = document.getElementById('lightbox');
+            const lbImage = document.getElementById('lb-image');
+            const tiles = Array.from(document.querySelectorAll('.tile'));
+            let current = -1;
+
+            function open(index){
+                const imgEl = imgs[index];
+                if(!imgEl) return;
+                // ensure full-res src is set
+                if(imgEl.dataset.src && !imgEl.src) imgEl.src = imgEl.dataset.src;
+                lbImage.src = imgEl.src;
+                lbImage.alt = imgEl.alt || '';
+                current = index;
+                lightbox.classList.add('visible');
+                lightbox.setAttribute('aria-hidden','false');
+                document.body.style.overflow = 'hidden';
+            }
+            function close(){
+                lightbox.classList.remove('visible');
+                lightbox.setAttribute('aria-hidden','true');
+                lbImage.src = '';
+                current = -1;
+                document.body.style.overflow = '';
+            }
+            function showNext(offset){
+                const len = imgs.length;
+                if(len===0) return;
+                current = (current + offset + len) % len;
+                const imgEl = imgs[current];
+                if(imgEl.dataset.src && !imgEl.src) imgEl.src = imgEl.dataset.src;
+                lbImage.src = imgEl.src;
+                lbImage.alt = imgEl.alt || '';
+            }
+
+            // open handlers
+            tiles.forEach((tile, i) => {
+                tile.querySelector('button').addEventListener('click', ()=> open(i));
+                // allow keyboard activation when tile focused
+                tile.addEventListener('keydown', e=>{
+                    if(e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(i); }
+                });
+                tile.setAttribute('tabindex','0');
+            });
+
+            // controls
+            lightbox.querySelector('.lb-close').addEventListener('click', close);
+            lightbox.querySelector('.lb-prev').addEventListener('click', ()=> showNext(-1));
+            lightbox.querySelector('.lb-next').addEventListener('click', ()=> showNext(1));
+
+            // keyboard
+            document.addEventListener('keydown', e=>{
+                if(lightbox.classList.contains('visible')){
+                    if(e.key === 'Escape') close();
+                    if(e.key === 'ArrowRight') showNext(1);
+                    if(e.key === 'ArrowLeft') showNext(-1);
+                }
+            });
+
+            // click outside image closes
+            lightbox.addEventListener('click', e=>{
+                if(e.target === lightbox) close();
+            });
+        })();
+    </script>
+</body>
+</html>
